@@ -21,3 +21,5 @@ shell-server@0.2.1            # Server-side component of the `meteor shell` comm
 accounts-password
 session
 fourseven:scss@=3.13.0
+practicalmeteor:mocha@=2.4.5_6
+react-meteor-data@=0.2.9
