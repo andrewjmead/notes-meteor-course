@@ -30,11 +30,12 @@ export default createContainer(() => {
 
   Meteor.subscribe('notes');
 
-  // Take notes add selected property to object
-  // Set to true if match, false if not
-
   return {
-    notes: Notes.find().fetch().map((note) => {
+    notes: Notes.find({}, {
+      sort: {
+        updatedAt: -1
+      }
+    }).fetch().map((note) => {
       return {
         ...note,
         selected: note._id === selectedNoteId
