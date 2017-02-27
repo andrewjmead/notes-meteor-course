@@ -4,6 +4,7 @@
   border: 1px solid $grey;
   overflow-y: scroll;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .item-list__header {
