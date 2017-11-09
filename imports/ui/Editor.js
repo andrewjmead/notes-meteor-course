@@ -39,6 +39,9 @@ export class Editor extends React.Component {
       });
     }
   }
+  componentDidMount() {
+    Session.set('selectedNoteId', this.props.match.params.id)
+  }
   render() {
     if (this.props.note) {
       return (
