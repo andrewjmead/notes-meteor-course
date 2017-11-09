@@ -1,12 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route, Switch } from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
 import { Session } from 'meteor/session';
 
 import Signup from '../ui/Signup';
 import Dashboard from '../ui/Dashboard';
 import NotFound from '../ui/NotFound';
 import Login from '../ui/Login';
+
+const history = createHistory()
 
 const onEnterNotePage = (nextState) => {
   Session.set('selectedNoteId', nextState.params.id);
@@ -32,13 +35,13 @@ export const globalOnEnter = (nextState) => {
   Session.set('currentPagePrivacy', lastRoute.privacy);
 };
 export const routes = (
-  <Router history={browserHistory}>
-    <Route onEnter={globalOnEnter} onChange={globalOnChange}>
-      <Route path="/" component={Login} privacy="unauth"/>
-      <Route path="/signup" component={Signup} privacy="unauth"/>
-      <Route path="/dashboard" component={Dashboard} privacy="auth"/>
-      <Route path="/dashboard/:id" component={Dashboard} privacy="auth" onEnter={onEnterNotePage} onLeave={onLeaveNotePage}/>
-      <Route path="*" component={NotFound}/>
-    </Route>
+  <Router history={history}>
+    <Switch>
+      <Route path="/" component={Login} exact={true} privacy="unauth" />
+      <Route path="/signup" component={Signup} privacy="unauth" />
+      <Route path="/dashboard" component={Dashboard} exact={true} privacy="auth" />
+      <Route path="/dashboard/:id" component={Dashboard} privacy="auth" onEnter={onEnterNotePage} onLeave={onLeaveNotePage} />
+      <Route path="*" component={NotFound} />
+    </Switch>
   </Router>
 );
