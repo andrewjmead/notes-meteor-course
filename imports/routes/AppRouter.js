@@ -9,7 +9,7 @@ import Dashboard from '../ui/Dashboard';
 import NotFound from '../ui/NotFound';
 import Login from '../ui/Login';
 
-const history = createHistory()
+export const history = createHistory()
 
 const onEnterNotePage = (nextState) => {
   Session.set('selectedNoteId', nextState.params.id);
@@ -22,9 +22,9 @@ export const onAuthChange = (isAuthenticated, currentPagePrivacy) => {
   const isAuthenticatedPage = currentPagePrivacy === 'auth';
 
   if (isUnauthenticatedPage && isAuthenticated) {
-    browserHistory.replace('/dashboard');
+    history.replace('/dashboard');
   } else if (isAuthenticatedPage && !isAuthenticated) {
-    browserHistory.replace('/');
+    history.replace('/');
   }
 };
 export const globalOnChange = (prevState, nextState) => {

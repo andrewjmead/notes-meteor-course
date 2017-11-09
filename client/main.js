@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
-import { browserHistory } from 'react-router';
 
-import { AppRouter, onAuthChange } from '../imports/routes/AppRouter';
+import { AppRouter, history, onAuthChange } from '../imports/routes/AppRouter';
 import '../imports/startup/simple-schema-configuration.js';
 
 Tracker.autorun(() => {
@@ -20,7 +19,7 @@ Tracker.autorun(() => {
   Session.set('isNavOpen', false);
 
   if (selectedNoteId) {
-    browserHistory.replace(`/dashboard/${selectedNoteId}`);
+    history.replace(`/dashboard/${selectedNoteId}`);
   }
 });
 
