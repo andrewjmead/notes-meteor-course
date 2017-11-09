@@ -7,22 +7,29 @@ export class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: ''
+      error: '',
+      email: '',
+      password: ''
     };
   }
   onSubmit(e) {
+    let { email, password } = this.state;
+
     e.preventDefault();
 
-    let email = this.refs.email.value.trim();
-    let password = this.refs.password.value.trim();
-
-    this.props.loginWithPassword({email}, password, (err) => {
+    this.props.loginWithPassword({ email }, password, (err) => {
       if (err) {
-        this.setState({error: 'Unable to login. Check email and password.'});
+        this.setState({ error: 'Unable to login. Check email and password.' });
       } else {
-        this.setState({error: ''});
+        this.setState({ error: '' });
       }
     });
+  }
+  onEmailChange(e) {
+    this.setState({ email: e.target.value.trim() })
+  }
+  onPasswordChange(e) {
+    this.setState({ password: e.target.value.trim() })
   }
   render() {
     return (
@@ -33,8 +40,8 @@ export class Login extends React.Component {
           {this.state.error ? <p>{this.state.error}</p> : undefined}
 
           <form onSubmit={this.onSubmit.bind(this)} noValidate className="boxed-view__form">
-            <input type="email" ref="email" name="email" placeholder="Email"/>
-            <input type="password" ref="password" name="password" placeholder="Password"/>
+            <input type="email" name="email" placeholder="Email" onChange={this.onEmailChange.bind(this)} value={this.state.email} />
+            <input type="password" name="password" placeholder="Password" onChange={this.onPasswordChange.bind(this)} value={this.state.password} />
             <button className="button">Login</button>
           </form>
 

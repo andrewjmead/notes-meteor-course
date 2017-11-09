@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import expect from 'expect';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { Signup } from './Signup';
 
@@ -10,7 +10,7 @@ if (Meteor.isClient) {
 
     it('should show error messages', function () {
       const error = 'This is not working';
-      const wrapper = mount(<Signup createUser={() => {}}/>);
+      const wrapper = shallow(<Signup createUser={() => { }} />);
 
       wrapper.setState({ error });
       expect(wrapper.find('p').text()).toBe(error);
@@ -23,11 +23,10 @@ if (Meteor.isClient) {
       const email = 'andrew@test.com';
       const password = 'password123';
       const spy = expect.createSpy();
-      const wrapper = mount(<Signup createUser={spy}/>);
+      const wrapper = shallow(<Signup createUser={spy} />);
 
-      wrapper.ref('email').node.value = email;
-      wrapper.ref('password').node.value = password;
-      wrapper.find('form').simulate('submit');
+      wrapper.setState({ email, password })
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } });
 
       expect(spy.calls[0].arguments[0]).toEqual({ email, password });
     });
@@ -36,11 +35,19 @@ if (Meteor.isClient) {
       const email = 'andrew@test.com';
       const password = '123                       ';
       const spy = expect.createSpy();
-      const wrapper = mount(<Signup createUser={spy}/>);
+      const wrapper = shallow(<Signup createUser={spy} />);
 
-      wrapper.ref('email').node.value = email;
-      wrapper.ref('password').node.value = password;
-      wrapper.find('form').simulate('submit');
+      wrapper.find({ name: 'email' }).simulate('change', {
+        target: {
+          value: email
+        }
+      });
+      wrapper.find({ name: 'password' }).simulate('change', {
+        target: {
+          value: password
+        }
+      });
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } });
 
       expect(wrapper.state('error').length).toBeGreaterThan(0);
     });
@@ -49,10 +56,10 @@ if (Meteor.isClient) {
       const password = 'password123!';
       const reason = 'This is why it failed';
       const spy = expect.createSpy();
-      const wrapper = mount(<Signup createUser={spy}/>);
+      const wrapper = shallow(<Signup createUser={spy} />);
 
-      wrapper.ref('password').node.value = password;
-      wrapper.find('form').simulate('submit');
+      wrapper.setState({ password })
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } });
 
       spy.calls[0].arguments[1]({ reason });
       expect(wrapper.state('error')).toBe(reason);

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import expect from 'expect';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { Login } from './Login';
 
@@ -10,7 +10,7 @@ if (Meteor.isClient) {
 
     it('should show error messages', function () {
       const error = 'This is not working';
-      const wrapper = mount(<Login loginWithPassword={() => {}}/>);
+      const wrapper = shallow(<Login loginWithPassword={() => { }} />);
 
       wrapper.setState({ error });
       expect(wrapper.find('p').text()).toBe(error);
@@ -23,11 +23,10 @@ if (Meteor.isClient) {
       const email = 'andrew@test.com';
       const password = 'password123';
       const spy = expect.createSpy();
-      const wrapper = mount(<Login loginWithPassword={spy}/>);
+      const wrapper = shallow(<Login loginWithPassword={spy} />);
 
-      wrapper.ref('email').node.value = email;
-      wrapper.ref('password').node.value = password;
-      wrapper.find('form').simulate('submit');
+      wrapper.setState({ email, password })
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } });
 
       expect(spy.calls[0].arguments[0]).toEqual({ email });
       expect(spy.calls[0].arguments[1]).toBe(password);
@@ -35,9 +34,9 @@ if (Meteor.isClient) {
 
     it('should set loginWithPassword callback errors', function () {
       const spy = expect.createSpy();
-      const wrapper = mount(<Login loginWithPassword={spy}/>);
+      const wrapper = shallow(<Login loginWithPassword={spy} />);
 
-      wrapper.find('form').simulate('submit');
+      wrapper.find('form').simulate('submit', { preventDefault: () => { } });
 
       spy.calls[0].arguments[2]({});
       expect(wrapper.state('error').length).toNotBe(0);

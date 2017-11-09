@@ -40,13 +40,15 @@ export class Editor extends React.Component {
     }
   }
   componentDidMount() {
-    Session.set('selectedNoteId', this.props.match.params.id)
+    if (this.props.match) {
+      this.props.Session.set('selectedNoteId', this.props.match.params.id)
+    }
   }
   render() {
     if (this.props.note) {
       return (
         <div className="editor">
-          <input className="editor__title" value={this.state.title} placeholder="Untitled Note" onChange={this.handleTitleChange.bind(this)}/>
+          <input className="editor__title" value={this.state.title} placeholder="Untitled Note" onChange={this.handleTitleChange.bind(this)} />
           <textarea className="editor__body" value={this.state.body} placeholder="Your note here" onChange={this.handleBodyChange.bind(this)}></textarea>
           <div>
             <button className="button button--secondary" onClick={this.handleRemoval.bind(this)}>Delete Note</button>
@@ -57,7 +59,7 @@ export class Editor extends React.Component {
       return (
         <div className="editor">
           <p className="editor__message">
-            { this.props.selectedNoteId ? 'Note not found.' : 'Pick or create a note to get started.'}
+            {this.props.selectedNoteId ? 'Note not found.' : 'Pick or create a note to get started.'}
           </p>
         </div>
       );
@@ -69,7 +71,8 @@ Editor.propTypes = {
   note: React.PropTypes.object,
   selectedNoteId: React.PropTypes.string,
   call: React.PropTypes.func.isRequired,
-  history: React.PropTypes.object.isRequired
+  history: React.PropTypes.object.isRequired,
+  Session: React.PropTypes.object.isRequired
 };
 
 export default withRouter(createContainer(() => {
@@ -78,6 +81,7 @@ export default withRouter(createContainer(() => {
   return {
     selectedNoteId,
     note: Notes.findOne(selectedNoteId),
-    call: Meteor.call
+    call: Meteor.call,
+    Session
   };
 }, Editor));
