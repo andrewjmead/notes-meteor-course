@@ -34,7 +34,7 @@ export const globalOnEnter = (nextState) => {
   const lastRoute = nextState.routes[nextState.routes.length - 1];
   Session.set('currentPagePrivacy', lastRoute.privacy);
 };
-export const routes = (
+export const AppRouter = () => (
   <Router history={history}>
     <Switch>
       <Route path="/" component={Login} exact={true} privacy="unauth" />

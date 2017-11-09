@@ -1,10 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import ReactDOM from 'react-dom';
+import React from 'react';
 import { Tracker } from 'meteor/tracker';
 import { Session } from 'meteor/session';
 import { browserHistory } from 'react-router';
 
-import { routes, onAuthChange } from '../imports/routes/routes';
+import { AppRouter, onAuthChange } from '../imports/routes/AppRouter';
 import '../imports/startup/simple-schema-configuration.js';
 
 Tracker.autorun(() => {
@@ -32,5 +33,5 @@ Tracker.autorun(() => {
 Meteor.startup(() => {
   Session.set('selectedNoteId', undefined);
   Session.set('isNavOpen', false);
-  ReactDOM.render(routes, document.getElementById('app'));
+  ReactDOM.render(<AppRouter />, document.getElementById('app'));
 });
